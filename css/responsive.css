@@ -57,6 +57,33 @@
         font-size: 100px;
         letter-spacing: -4px;
         margin-bottom: 30px;
+        /* Reduce animation complexity on mobile for better performance */
+        animation: none;
+        text-shadow: 
+            0 0 20px rgba(255, 255, 255, 0.8),
+            0 0 40px rgba(99, 102, 241, 0.6),
+            0 2px 10px rgba(0, 0, 0, 0.4);
+    }
+    
+    /* Reduce backdrop filter on mobile for better performance */
+    .header {
+        backdrop-filter: blur(12px) saturate(150%);
+        -webkit-backdrop-filter: blur(12px) saturate(150%);
+    }
+    
+    .cart-sidebar {
+        backdrop-filter: blur(12px) saturate(150%);
+        -webkit-backdrop-filter: blur(12px) saturate(150%);
+    }
+    
+    .product-modal {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+    }
+    
+    /* Reduce sphere animations on mobile */
+    .metallic-sphere {
+        animation-duration: 20s;
     }
     
     .decorative-circle {
@@ -258,6 +285,17 @@
         font-size: 70px;
         letter-spacing: -2px;
         margin-bottom: 20px;
+        /* Disable complex animations on very small screens */
+        animation: none;
+        text-shadow: 
+            0 0 15px rgba(255, 255, 255, 0.7),
+            0 0 30px rgba(99, 102, 241, 0.5),
+            0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Hide spheres on very small screens for better performance */
+    .metallic-sphere {
+        display: none;
     }
     
     .decorative-circle {

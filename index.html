@@ -2,13 +2,39 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fashion Store </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="متجر أزياء عصري يقدم أحدث صيحات الموضة والملابس العصرية">
+    <meta name="keywords" content="أزياء, موضة, ملابس, تسوق, fashion, store">
+    <meta name="author" content="Fashion Store">
+    <meta name="theme-color" content="#6366F1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Fashion Store - متجر الأزياء العصرية</title>
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Fashion Store - متجر الأزياء العصرية">
+    <meta property="og:description" content="متجر أزياء عصري يقدم أحدث صيحات الموضة والملابس العصرية">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fashion Store - متجر الأزياء العصرية">
+    <meta name="twitter:description" content="متجر أزياء عصري يقدم أحدث صيحات الموضة والملابس العصرية">
+    <!-- Resource Hints for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Cinzel+Decorative:wght@400;700;900&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="css/responsive.css" as="style">
+    <link rel="prefetch" href="js/app.js" as="script">
+    <link rel="prefetch" href="js/products.js" as="script">
+    <!-- Fonts with display=swap for better performance -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Cinzel+Decorative:wght@400;700;900&family=Uncial+Antiqua&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&family=Cinzel+Decorative:wght@400;700;900&family=Uncial+Antiqua&display=swap" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/skeleton.css">
 </head>
 <body>
     <!-- Header -->
@@ -66,7 +92,7 @@
                 <div class="metallic-sphere sphere-4"></div>
                 <div class="metallic-sphere sphere-5"></div>
             </div>
-            <img src="aseets/image (8).png" alt="Fashion Hero" class="hero-image">
+            <img src="aseets/image (8).png" alt="Fashion Hero" class="hero-image" loading="eager" fetchpriority="high" decoding="async">
         </div>
     </section>
 
@@ -165,19 +191,22 @@
                 <h3 class="footer-logo">Fashion Store</h3>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Fashion Store. جميع الحقوق محفوظة.</p>
+                <p>&copy; 2025 Fashion Store. جميع الحقوق محفوظة.</p>
             </div>
         </div>
     </footer>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/config.js"></script>
-    <script src="js/mock-data.js"></script>
-    <script src="js/supabase-service.js"></script>
-    <script src="js/cart.js"></script>
-    <script src="js/products.js"></script>
-    <script src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+    <script src="js/config.js" defer></script>
+    <script src="js/mock-data.js" defer></script>
+    <script src="js/performance.js" defer></script>
+    <script src="js/virtual-scroll.js" defer></script>
+    <script src="js/supabase-service.js" defer></script>
+    <script src="js/intersection-observer.js" defer></script>
+    <script src="js/cart.js" defer></script>
+    <script src="js/products.js" defer></script>
+    <script src="js/app.js" defer></script>
 </body>
 </html>
 

@@ -1,32 +1,46 @@
+// Register Service Worker for caching
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/js/service-worker.js')
+            .then(registration => {
+                console.log('Service Worker registered:', registration);
+            })
+            .catch(error => {
+                console.log('Service Worker registration failed:', error);
+            });
+    });
+}
+
 // Main App Initialization
 document.addEventListener('DOMContentLoaded', async () => {
-    // Initialize Supabase (only if not using mock data)
-    if (!useMockData) {
-        await SupabaseService.initialize();
-    }
-    
-    // Initialize Cart
-    Cart.init();
-    
-    // Load categories and products
-    await loadCategories();
-    await loadProducts();
-    
-    // Setup event listeners
-    setupEventListeners();
+    // Measure initialization performance
+    PerformanceOptimizer.measurePerformance('app-init', async () => {
+        // Initialize Supabase (only if not using mock data)
+        if (!useMockData) {
+            await SupabaseService.initialize();
+        }
+        
+        // Initialize Cart
+        Cart.init();
+        
+        // Load categories and products in parallel
+        await Promise.all([
+            loadCategories(),
+            loadProducts()
+        ]);
+        
+        // Setup event listeners
+        setupEventListeners();
+    });
 });
 
 function setupEventListeners() {
-    // Search
+    // Search - using passive listeners where possible
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
-        let searchTimeout;
         searchInput.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                searchProducts(e.target.value);
-            }, 300);
-        });
+            searchProducts(e.target.value);
+        }, { passive: true });
     }
     
     // Category filter
@@ -103,7 +117,7 @@ function setupEventListeners() {
         });
     }
     
-    // Nav links
+    // Nav links - optimized scroll
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -111,13 +125,28 @@ function setupEventListeners() {
             if (target.startsWith('#')) {
                 const section = document.querySelector(target);
                 if (section) {
-                    section.scrollIntoView({ behavior: 'smooth' });
+                    // Use requestAnimationFrame for smooth scroll
+                    requestAnimationFrame(() => {
+                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
                 }
             }
             navMenu.classList.remove('active');
             menuToggle.classList.remove('active');
         });
     });
+    
+    // Optimize scroll performance
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                // Any scroll-based updates here
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
 }
 
 async function handleCheckout() {

@@ -39,6 +39,8 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-text-size-adjust: 100%;
 }
 
 /* Hide Scrollbar */
@@ -94,6 +96,8 @@ body::-webkit-scrollbar {
     -webkit-backdrop-filter: blur(24px) saturate(180%);
     border-bottom: 1px solid rgba(226, 232, 240, 0.6);
     transition: var(--transition);
+    will-change: background, box-shadow;
+    transform: translateZ(0);
 }
 
 .header:hover {
@@ -323,7 +327,7 @@ body::-webkit-scrollbar {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) translateZ(0);
     font-size: clamp(100px, 25vw, 250px);
     font-weight: 900;
     font-family: 'Cinzel Decorative', 'Uncial Antiqua', 'Bebas Neue', serif;
@@ -349,6 +353,9 @@ body::-webkit-scrollbar {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     animation: glowPulse 3s ease-in-out infinite;
+    will-change: text-shadow;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .hero-text-large .transparent-char {
@@ -398,6 +405,9 @@ body::-webkit-scrollbar {
     will-change: transform;
     z-index: 1;
     mix-blend-mode: normal;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .hero-image:hover {
@@ -435,6 +445,10 @@ body::-webkit-scrollbar {
         0 0 0 1px rgba(255, 255, 255, 0.1);
     filter: blur(0.5px);
     animation: floatSphere 8s ease-in-out infinite;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .metallic-sphere::before {
@@ -475,37 +489,37 @@ body::-webkit-scrollbar {
 
 @keyframes floatSphere {
     0% {
-        transform: translate(0, 0) rotate(0deg);
+        transform: translate3d(0, 0, 0) rotate(0deg);
     }
     10% {
-        transform: translate(80px, -120px) rotate(45deg);
+        transform: translate3d(80px, -120px, 0) rotate(45deg);
     }
     20% {
-        transform: translate(-60px, 90px) rotate(120deg);
+        transform: translate3d(-60px, 90px, 0) rotate(120deg);
     }
     30% {
-        transform: translate(120px, 60px) rotate(200deg);
+        transform: translate3d(120px, 60px, 0) rotate(200deg);
     }
     40% {
-        transform: translate(-100px, -80px) rotate(280deg);
+        transform: translate3d(-100px, -80px, 0) rotate(280deg);
     }
     50% {
-        transform: translate(70px, 110px) rotate(360deg);
+        transform: translate3d(70px, 110px, 0) rotate(360deg);
     }
     60% {
-        transform: translate(-130px, -50px) rotate(450deg);
+        transform: translate3d(-130px, -50px, 0) rotate(450deg);
     }
     70% {
-        transform: translate(90px, -100px) rotate(540deg);
+        transform: translate3d(90px, -100px, 0) rotate(540deg);
     }
     80% {
-        transform: translate(-80px, 130px) rotate(630deg);
+        transform: translate3d(-80px, 130px, 0) rotate(630deg);
     }
     90% {
-        transform: translate(110px, -70px) rotate(720deg);
+        transform: translate3d(110px, -70px, 0) rotate(720deg);
     }
     100% {
-        transform: translate(0, 0) rotate(810deg);
+        transform: translate3d(0, 0, 0) rotate(810deg);
     }
 }
 
@@ -584,11 +598,22 @@ body::-webkit-scrollbar {
     .metallic-sphere {
         width: 60px !important;
         height: 60px !important;
+        /* Reduce animation complexity on mobile */
+        animation-duration: 20s !important;
     }
     
     .sphere-1, .sphere-2, .sphere-3, .sphere-4, .sphere-5 {
         width: 60px !important;
         height: 60px !important;
+    }
+    
+    /* Optimize product card animations on mobile */
+    .product-card:hover {
+        transform: translateY(-8px) scale(1.02);
+    }
+    
+    .category-card:hover {
+        transform: translateY(-12px) scale(1.03);
     }
 }
 
@@ -720,6 +745,7 @@ section {
     padding: 100px 0;
     position: relative;
     animation: fadeInUp 0.8s ease-out;
+    will-change: transform, opacity;
 }
 
 @keyframes fadeInUp {
@@ -792,6 +818,8 @@ section {
 .categories-section {
     background: var(--background-dark);
     overflow: hidden;
+    content-visibility: auto;
+    contain-intrinsic-size: 500px;
 }
 
 .categories-grid {
@@ -805,6 +833,7 @@ section {
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE and Edge */
     animation: fadeInUp 1s ease-out 0.3s both;
+    contain: layout style paint;
 }
 
 .categories-grid::-webkit-scrollbar {
@@ -833,6 +862,8 @@ section {
     flex: 0 0 300px;
     min-width: 300px;
     max-width: 300px;
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
 }
 
 .category-card::before {
@@ -909,6 +940,10 @@ section {
     height: 100%;
     object-fit: cover;
     transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .category-card:hover .category-image img {
@@ -954,6 +989,8 @@ section {
 /* Products */
 .products-section {
     background: var(--background);
+    content-visibility: auto;
+    contain-intrinsic-size: 1000px;
 }
 
 .filter-controls {
@@ -993,6 +1030,22 @@ section {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 32px;
     animation: fadeInUp 1s ease-out 0.2s both;
+    contain: layout style paint;
+}
+
+/* Virtual scroll container */
+.products-grid.virtual-scroll-container {
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    contain: layout style paint;
+    will-change: scroll-position;
+}
+
+.products-grid.virtual-scroll-container > div {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 32px;
 }
 
 .product-card {
@@ -1007,6 +1060,8 @@ section {
     border: 1px solid var(--border-color);
     position: relative;
     background: linear-gradient(to bottom, white, var(--background-dark));
+    will-change: transform, box-shadow;
+    transform: translateZ(0);
 }
 
 .product-card::before {
@@ -1046,6 +1101,10 @@ section {
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .product-card:hover .product-image img {
@@ -1109,6 +1168,8 @@ section {
     display: flex;
     flex-direction: column;
     border-left: 1px solid var(--border-color);
+    will-change: left;
+    transform: translateZ(0);
 }
 
 .cart-sidebar.active {
@@ -1284,6 +1345,8 @@ section {
     padding: 20px;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+    will-change: opacity;
+    transform: translateZ(0);
 }
 
 .product-modal.active {

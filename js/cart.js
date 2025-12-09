@@ -82,59 +82,73 @@ class Cart {
     }
 
     static updateCartUI() {
-        const cartCount = document.getElementById('cartCount');
-        const cartItems = document.getElementById('cartItems');
-        const cartFooter = document.getElementById('cartFooter');
-        const cartTotal = document.getElementById('cartTotal');
+        // Use requestAnimationFrame for smooth UI updates
+        PerformanceOptimizer.batchDOMUpdates([() => {
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartFooter = document.getElementById('cartFooter');
+            const cartTotal = document.getElementById('cartTotal');
 
-        if (cartCount) {
-            cartCount.textContent = this.getItemCount();
-            cartCount.style.display = this.getItemCount() > 0 ? 'flex' : 'none';
-        }
+            if (cartCount) {
+                cartCount.textContent = this.getItemCount();
+                cartCount.style.display = this.getItemCount() > 0 ? 'flex' : 'none';
+            }
 
-        if (cartItems) {
-            if (this.items.length === 0) {
-                cartItems.innerHTML = `
-                    <div class="empty-cart">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                        <p>سلة التسوق فارغة</p>
-                    </div>
-                `;
-                if (cartFooter) cartFooter.style.display = 'none';
-            } else {
-                cartItems.innerHTML = this.items.map(item => `
-                    <div class="cart-item">
-                        <img src="${item.image || 'https://via.placeholder.com/80'}" alt="${item.name}" class="cart-item-image">
-                        <div class="cart-item-info">
-                            <h4 class="cart-item-name">${item.name}</h4>
-                            <p class="cart-item-price">${item.price.toFixed(2)} جنيه</p>
-                            <div class="cart-item-controls">
-                                <button class="quantity-btn" onclick="Cart.updateQuantity('${item.id}', ${item.quantity - 1})">-</button>
-                                <span class="quantity">${item.quantity}</span>
-                                <button class="quantity-btn" onclick="Cart.updateQuantity('${item.id}', ${item.quantity + 1})">+</button>
-                            </div>
-                        </div>
-                        <button class="cart-item-remove" onclick="Cart.removeItem('${item.id}')">
+            if (cartItems) {
+                if (this.items.length === 0) {
+                    cartItems.innerHTML = `
+                        <div class="empty-cart">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                             </svg>
-                        </button>
-                    </div>
-                `).join('');
-                
-                if (cartFooter) {
-                    cartFooter.style.display = 'block';
-                    if (cartTotal) {
-                        cartTotal.textContent = `${this.getTotal().toFixed(2)} جنيه`;
+                            <p>سلة التسوق فارغة</p>
+                        </div>
+                    `;
+                    if (cartFooter) cartFooter.style.display = 'none';
+                } else {
+                    // Use DocumentFragment for better performance
+                    const fragment = document.createDocumentFragment();
+                    const tempDiv = document.createElement('div');
+                    
+                    tempDiv.innerHTML = this.items.map(item => `
+                        <div class="cart-item">
+                            <img src="${item.image || 'https://via.placeholder.com/80'}" alt="${item.name}" class="cart-item-image" loading="lazy" decoding="async">
+                            <div class="cart-item-info">
+                                <h4 class="cart-item-name">${item.name}</h4>
+                                <p class="cart-item-price">${item.price.toFixed(2)} جنيه</p>
+                                <div class="cart-item-controls">
+                                    <button class="quantity-btn" onclick="Cart.updateQuantity('${item.id}', ${item.quantity - 1})">-</button>
+                                    <span class="quantity">${item.quantity}</span>
+                                    <button class="quantity-btn" onclick="Cart.updateQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                                </div>
+                            </div>
+                            <button class="cart-item-remove" onclick="Cart.removeItem('${item.id}')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                    `).join('');
+                    
+                    while (tempDiv.firstChild) {
+                        fragment.appendChild(tempDiv.firstChild);
+                    }
+                    
+                    cartItems.innerHTML = '';
+                    cartItems.appendChild(fragment);
+                    
+                    if (cartFooter) {
+                        cartFooter.style.display = 'block';
+                        if (cartTotal) {
+                            cartTotal.textContent = `${this.getTotal().toFixed(2)} جنيه`;
+                        }
                     }
                 }
             }
-        }
+        }]);
     }
 
     static showAddToCartNotification(productName) {
